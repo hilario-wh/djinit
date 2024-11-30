@@ -154,3 +154,13 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Keep this at the end of the file.
+# Use this section as the last resort. Try to fix everything 
+# with django-environ package
+try:
+    # Try import settings_server.py for local purpose.
+    from settings_server import *
+except ImportError:
+    # Doesn't matter if settings_server.py not exist.
+    pass
