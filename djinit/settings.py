@@ -54,9 +54,13 @@ DJANGO_APPS = [
 
 PROJECT_APPS = [
     'djinit.apps.users',
+    'djinit.apps.warehouse'
 ]
 
-THIRD_PARTY_APPS = []
+THIRD_PARTY_APPS = [
+    'allauth',
+    'allauth.account',
+]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
 
@@ -68,6 +72,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'djinit.core.urls'
@@ -102,9 +107,14 @@ WSGI_APPLICATION = 'djinit.core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': env.str('DB_NAME'),
+        'USER': env.str('DB_USER'),
+        'PASSWORD': env.str('DB_PASSWORD'),
+        'HOST': env.str('DB_HOST'),
+        'PORT': env.str('DB_PORT'),
+        'OPTIONS': {},
+    },
 }
 
 
@@ -125,6 +135,18 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django cetc_admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+# django allauth
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
 
 
 # Internationalization
